@@ -1,0 +1,19 @@
+[[extend 'base.html']]
+
+[[block page_title]][[=page.title]] – Bortelid[[end]]
+
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+  [[if page.image:]]
+  <img src="[[=URL('download', page.image)]]"
+       alt="[[=page.title]]"
+       class="w-full rounded-2xl object-cover max-h-72 mb-8 shadow-sm">
+  [[pass]]
+
+  <h1 class="text-3xl font-bold text-gray-900 mb-6">[[=page.title]]</h1>
+
+  <div class="prose prose-gray max-w-none text-gray-700 leading-relaxed">
+    [[=XML(page.content)]]
+  </div>
+
+</div>

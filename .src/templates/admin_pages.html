@@ -1,0 +1,103 @@
+[[extend 'base.html']]
+
+[[block page_title]]Admin – Sider[[end]]
+
+[[block page_nav_links]]
+<a href="[[=URL('admin/index')]]" class="hover:text-green-300 transition-colors">Admin</a>
+[[end]]
+[[block page_nav_links_mobile]]
+<a href="[[=URL('admin/index')]]" class="block px-2 py-1.5 rounded hover:bg-forest-700 transition-colors">Admin</a>
+[[end]]
+
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+  <!-- Breadcrumb -->
+  <nav class="flex items-center gap-2 text-sm text-gray-400 mb-6">
+    <a href="[[=URL('admin/index')]]" class="hover:text-gray-600 transition-colors">Admin</a>
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+    </svg>
+    <span class="text-gray-700 font-medium">Sider</span>
+  </nav>
+
+  <!-- Header row -->
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">CMS – Sider</h1>
+      <p class="text-sm text-gray-500 mt-0.5">Administrer innholdsider som vises på nettstedet.</p>
+    </div>
+    <a href="[[=URL('admin/pages/new')]]"
+       class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+      </svg>
+      Ny side
+    </a>
+  </div>
+
+  <!-- Flash alert (rendered by base.html web component, but we add a fallback banner too) -->
+
+  <!-- Pages table -->
+  [[if pages:]]
+  <div class="overflow-hidden rounded-xl border border-gray-200 shadow-sm">
+    <table class="min-w-full divide-y divide-gray-200 text-sm">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-4 py-3 text-left font-semibold text-gray-600 w-6">#</th>
+          <th class="px-4 py-3 text-left font-semibold text-gray-600">Tittel</th>
+          <th class="px-4 py-3 text-left font-semibold text-gray-600 hidden sm:table-cell">Slug</th>
+          <th class="px-4 py-3 text-center font-semibold text-gray-600 hidden md:table-cell">Pos.</th>
+          <th class="px-4 py-3 text-center font-semibold text-gray-600">Status</th>
+          <th class="px-4 py-3 text-right font-semibold text-gray-600">Handlinger</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100 bg-white">
+        [[for p in pages:]]
+        <tr class="hover:bg-gray-50 transition-colors">
+          <td class="px-4 py-3 text-gray-400">[[=p.id]]</td>
+          <td class="px-4 py-3 font-medium text-gray-900">[[=p.title]]</td>
+          <td class="px-4 py-3 text-gray-500 font-mono text-xs hidden sm:table-cell">/[[=p.slug]]</td>
+          <td class="px-4 py-3 text-center text-gray-500 hidden md:table-cell">[[=p.position]]</td>
+          <td class="px-4 py-3 text-center">
+            [[if p.is_published:]]
+            <span class="inline-block px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium">Publisert</span>
+            [[else:]]
+            <span class="inline-block px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-xs font-medium">Utkast</span>
+            [[pass]]
+          </td>
+          <td class="px-4 py-3 text-right space-x-2">
+            <a href="[[=URL(f'admin/pages/{p.id}/edit')]]"
+               class="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-500 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+              </svg>
+              Rediger
+            </a>
+            <form method="POST" action="[[=URL(f'admin/pages/{p.id}/delete')]]"
+                  class="inline"
+                  onsubmit="return confirm('Slett «[[=p.title]]»? Dette kan ikke angres.');">
+              <button type="submit"
+                      class="inline-flex items-center gap-1 text-xs font-medium text-red-500 hover:text-red-400 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+                Slett
+              </button>
+            </form>
+          </td>
+        </tr>
+        [[pass]]
+      </tbody>
+    </table>
+  </div>
+  [[else:]]
+  <div class="text-center py-20 text-gray-400">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+    </svg>
+    <p class="text-lg font-medium">Ingen sider ennå.</p>
+    <p class="text-sm mt-1">Klikk «Ny side» for å komme i gang.</p>
+  </div>
+  [[pass]]
+
+</div>

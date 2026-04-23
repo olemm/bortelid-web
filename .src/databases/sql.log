@@ -1,0 +1,62 @@
+timestamp: 2026-04-21T12:49:32.356131
+CREATE TABLE "auth_user"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "username" CHAR(512) UNIQUE,
+    "email" CHAR(512) UNIQUE,
+    "password" CHAR(512),
+    "first_name" CHAR(512),
+    "last_name" CHAR(512),
+    "sso_id" CHAR(512),
+    "action_token" CHAR(512),
+    "last_password_change" TIMESTAMP,
+    "past_passwords_hash" TEXT
+);
+success!
+timestamp: 2026-04-21T12:49:32.365443
+CREATE TABLE "auth_user_tag_groups"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "tagpath" CHAR(512),
+    "record_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE ON UPDATE CASCADE  
+);
+success!
+timestamp: 2026-04-21T13:26:39.357433
+CREATE TABLE `auth_user`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `username` VARCHAR(512) UNIQUE,
+    `email` VARCHAR(512) UNIQUE,
+    `password` VARCHAR(512),
+    `first_name` VARCHAR(512),
+    `last_name` VARCHAR(512),
+    `sso_id` VARCHAR(512),
+    `action_token` VARCHAR(512),
+    `last_password_change` DATETIME,
+    `past_passwords_hash` LONGTEXT,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2026-04-21T13:26:39.514419
+CREATE TABLE `auth_user_tag_groups`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `tagpath` VARCHAR(512),
+    `record_id` INT  , INDEX `record_id__idx` (`record_id`), FOREIGN KEY (`record_id`) REFERENCES `auth_user` (`id`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2026-04-21T14:02:32.612901
+CREATE TABLE `pages`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `title` VARCHAR(255) NOT NULL,
+    `slug` VARCHAR(255) NOT NULL UNIQUE,
+    `content` LONGTEXT,
+    `image_url` VARCHAR(512),
+    `position` INTEGER,
+    `is_published` CHAR(1),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2026-04-21T15:30:15.912950
+ALTER TABLE `pages` ADD `image` VARCHAR(512);
+success!
+timestamp: 2026-04-21T15:30:15.959005
+ALTER TABLE `pages` DROP COLUMN `image_url`;
+success!

@@ -1,0 +1,221 @@
+[[extend 'base.html']]
+
+[[block page_title]][[=page_title]] – Admin[[end]]
+
+[[block page_nav_links]]
+<a href="[[=URL('admin/index')]]" class="hover:text-green-300 transition-colors">Admin</a>
+[[end]]
+[[block page_nav_links_mobile]]
+<a href="[[=URL('admin/index')]]" class="block px-2 py-1.5 rounded hover:bg-forest-700 transition-colors">Admin</a>
+[[end]]
+
+[[block page_scripts]]
+<script>
+  // Auto-generate slug from title (only when slug field is still empty)
+  const titleInput = document.getElementById('title');
+  const slugInput  = document.getElementById('slug');
+
+  function toSlug(str) {
+    return str
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/[\s_-]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  // Show selected filename in upload label
+  document.getElementById('image').addEventListener('change', function () {
+    const label = this.closest('label');
+    const span  = label.querySelector('span.text-sm');
+    if (this.files && this.files[0]) {
+      span.textContent = '✓ ' + this.files[0].name;
+      span.classList.add('text-green-700');
+    }
+  });
+
+  titleInput.addEventListener('input', () => {
+    if (!slugInput.dataset.edited) {
+      slugInput.value = toSlug(titleInput.value);
+    }
+  });
+
+  slugInput.addEventListener('input', () => {
+    slugInput.dataset.edited = '1';
+  });
+</script>
+[[end]]
+
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+  <!-- Breadcrumb -->
+  <nav class="flex items-center gap-2 text-sm text-gray-400 mb-6">
+    <a href="[[=URL('admin/index')]]" class="hover:text-gray-600 transition-colors">Admin</a>
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+    </svg>
+    <a href="[[=URL('admin/pages')]]" class="hover:text-gray-600 transition-colors">Sider</a>
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+    </svg>
+    <span class="text-gray-700 font-medium">[[=page_title]]</span>
+  </nav>
+
+  <h1 class="text-2xl font-bold text-gray-900 mb-8">[[=page_title]]</h1>
+
+  <!-- Validation summary -->
+  [[if form.errors:]]
+  <div class="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+    <strong class="font-semibold">Vennligst rett opp følgende feil:</strong>
+    <ul class="list-disc list-inside mt-1 space-y-0.5">
+      [[for msg in form.errors.values():]]
+      <li>[[=msg]]</li>
+      [[pass]]
+    </ul>
+  </div>
+  [[pass]]
+
+  [[=form.custom.begin]]
+
+  <div class="bg-white rounded-2xl border border-gray-200 shadow-sm divide-y divide-gray-100">
+
+    <!-- Title -->
+    <div class="px-6 py-5">
+      <label for="title" class="block text-sm font-semibold text-gray-700 mb-1.5">
+        Tittel <span class="text-red-500">*</span>
+      </label>
+      <input id="title" name="title" type="text"
+             value="[[=form.vars.get('title', '')]]"
+             placeholder="F.eks. Om Bortelid"
+             class="w-full rounded-lg border [[='border-red-400 bg-red-50' if form.errors.get('title') else 'border-gray-300']]
+                    px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition">
+      [[if form.errors.get('title'):]]
+      <p class="mt-1 text-xs text-red-600">[[=form.errors['title']]]</p>
+      [[pass]]
+    </div>
+
+    <!-- Slug -->
+    <div class="px-6 py-5">
+      <label for="slug" class="block text-sm font-semibold text-gray-700 mb-1.5">
+        Slug (URL) <span class="text-red-500">*</span>
+      </label>
+      <div class="flex items-center rounded-lg border [[='border-red-400 bg-red-50' if form.errors.get('slug') else 'border-gray-300']] overflow-hidden focus-within:ring-2 focus-within:ring-green-400 transition">
+        <span class="px-3 py-2 text-sm text-gray-400 bg-gray-50 border-r border-gray-300 select-none">/</span>
+        <input id="slug" name="slug" type="text"
+               value="[[=form.vars.get('slug', '')]]"
+               placeholder="om-bortelid"
+               class="flex-1 px-3 py-2 text-sm focus:outline-none bg-transparent">
+      </div>
+      [[if form.errors.get('slug'):]]
+      <p class="mt-1 text-xs text-red-600">[[=form.errors['slug']]]</p>
+      [[else:]]
+      <p class="mt-1 text-xs text-gray-400">Brukes i URL-en. Genereres automatisk fra tittelen.</p>
+      [[pass]]
+    </div>
+
+    <!-- Content -->
+    <div class="px-6 py-5">
+      <label for="content" class="block text-sm font-semibold text-gray-700 mb-1.5">Innhold</label>
+      <textarea id="content" name="content" rows="10"
+                placeholder="Skriv HTML eller tekst her…"
+                class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm font-mono
+                       focus:outline-none focus:ring-2 focus:ring-green-400 transition resize-y">[[=form.vars.get('content', '')]]</textarea>
+      <p class="mt-1 text-xs text-gray-400">HTML støttes.</p>
+    </div>
+
+    <!-- Image upload -->
+    <div class="px-6 py-5">
+      <label class="block text-sm font-semibold text-gray-700 mb-2">Bilde</label>
+
+      [[_current_img = form.vars.get('image', '')]]
+      [[if _current_img:]]
+      <div class="mb-3 flex items-start gap-4">
+        <img src="[[=URL('download', _current_img)]]"
+             alt="Nåværende bilde"
+             class="h-28 w-auto rounded-lg object-cover border border-gray-200 shadow-sm">
+        <div class="text-xs text-gray-500 mt-1">
+          <p class="font-medium text-gray-700 mb-1">Nåværende bilde</p>
+          <p class="font-mono break-all text-gray-400">[[=_current_img]]</p>
+          <label class="mt-2 inline-flex items-center gap-2 text-red-600 cursor-pointer hover:text-red-500">
+            <input type="checkbox" name="remove_image"
+                   class="rounded border-gray-300 text-red-500 focus:ring-red-400">
+            Fjern bilde
+          </label>
+        </div>
+      </div>
+      [[pass]]
+
+      <label for="image"
+             class="flex flex-col items-center justify-center w-full rounded-lg border-2 border-dashed
+                    border-gray-300 hover:border-green-400
+                    px-4 py-6 text-center cursor-pointer transition-colors group">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             class="h-8 w-8 mb-2 text-gray-400 group-hover:text-green-500 transition-colors"
+             fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14
+                   m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        <span class="text-sm font-medium text-gray-600 group-hover:text-green-600 transition-colors">
+          [[if _current_img:]]Erstatt med nytt bilde[[else:]]Velg bilde[[pass]]
+        </span>
+        <span class="text-xs text-gray-400 mt-0.5">JPG, PNG, GIF eller WebP</span>
+        <input id="image" name="image" type="file"
+               accept=".jpg,.jpeg,.png,.gif,.webp,image/*"
+               class="sr-only">
+      </label>
+    </div>
+
+    <!-- Position + Published -->
+    <div class="px-6 py-5 grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+      <div>
+        <label for="position" class="block text-sm font-semibold text-gray-700 mb-1.5">
+          Menyposisjon
+        </label>
+        <input id="position" name="position" type="number" min="0"
+               value="[[=form.vars.get('position', 0)]]"
+               class="w-full rounded-lg border [[='border-red-400 bg-red-50' if form.errors.get('position') else 'border-gray-300']]
+                      px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition">
+        [[if form.errors.get('position'):]]
+        <p class="mt-1 text-xs text-red-600">[[=form.errors['position']]]</p>
+        [[else:]]
+        <p class="mt-1 text-xs text-gray-400">Lavere tall vises først i menyen.</p>
+        [[pass]]
+      </div>
+
+      <div class="flex flex-col justify-center">
+        <label class="block text-sm font-semibold text-gray-700 mb-3">Status</label>
+        <label class="inline-flex items-center gap-3 cursor-pointer select-none">
+          <input type="checkbox" id="is_published" name="is_published"
+                 [[='checked' if form.vars.get('is_published') else '']]
+                 class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500 cursor-pointer">
+          <span class="text-sm text-gray-700">Publisert</span>
+        </label>
+        <p class="mt-1 text-xs text-gray-400">Upubliserte sider er kun synlige for administratorer.</p>
+      </div>
+
+    </div>
+
+    <!-- Actions -->
+    <div class="px-6 py-4 bg-gray-50 rounded-b-2xl flex items-center justify-between gap-4">
+      <a href="[[=URL('admin/pages')]]"
+         class="text-sm text-gray-500 hover:text-gray-700 transition-colors">
+        &larr; Avbryt
+      </a>
+      <button type="submit"
+              class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500
+                     text-white text-sm font-semibold px-5 py-2 rounded-lg
+                     transition-colors shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+        </svg>
+        Lagre side
+      </button>
+    </div>
+
+  </div>
+
+  </form>
+
+</div>
