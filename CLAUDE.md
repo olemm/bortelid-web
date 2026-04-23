@@ -7,17 +7,17 @@
 - **Dependency Manager:** `uv`
 
 ## Project Structure & Routing
-- **Core App:** Located in `apps/_scaffold/`
+- **Core App:** Located in `.src/`
 - **Controller Pattern:** 
-    - Individual controller logic must be developed in the `apps/_scaffold/controllers/` directory.
-    - To make a controller visible to py4web, it **must** be imported into `apps/_scaffold/controllers.py`.
-- **Views/Templates:** Located in `apps/_scaffold/templates/`
-- **Static Assets:** Located in `apps/_scaffold/static/`
+    - Individual controller logic must be developed in the `.src/controllers/` directory.
+    - To make a controller visible to py4web, it **must** be imported into `.src/controllers.py`.
+- **Views/Templates:** Located in `.src/templates/`
+- **Static Assets:** Located in `.src/static/`
 
 ## Database Management
-- **Connection:** Configured via `DB_URI` in `apps/_scaffold/settings.py`.
-- **Schema Definitions:** All table definitions and database structures must be stored as files within `apps/_scaffold/databases/`.
-- **Workflow:** When adding new tables or modifying existing ones, update the corresponding file in `_scaffold/databases/` to maintain a source of truth for the schema.
+- **Connection:** Configured via `DB_URI` in `.src/settings.py`.
+- **Schema Definitions:** All table definitions and database structures must be stored as files within `.src/databases/`.
+- **Workflow:** When adding new tables or modifying existing ones, update the corresponding file in `.src/databases/` to maintain a source of truth for the schema.
 - **Library:** Use `pymysql` for underlying connectivity.
 
 ## Development Commands
@@ -36,5 +36,4 @@
 - **Write Access:** The AI must still ask for permission before modifying files in `apps/` or `config/`.
 - **Execution:** The AI is permitted to run `uv run` commands for read-only tasks (like `ls` or `cat`) without explicit confirmation.
 
-- **CRITICAL:** `apps/_scaffold/controllers.py` is the application's dispatcher. NEVER empty this file. Whenever a new controller file is created in `controllers/`, it MUST be imported into `controllers.py` using `from .controllers.filename import *`.
-
+- **CRITICAL:** `.src/controllers.py` is the application's dispatcher. NEVER empty this file. Whenever a new controller file is created in `controllers/`, it MUST be imported into `controllers.py` using `from .controllers.filename import *`.
