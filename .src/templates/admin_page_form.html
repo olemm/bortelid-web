@@ -2,6 +2,10 @@
 
 [[block page_title]][[=page_title]] – Admin[[end]]
 
+[[block page_head]]
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+[[end]]
+
 [[block page_nav_links]]
 <a href="[[=URL('admin/index')]]" class="hover:text-green-300 transition-colors">Admin</a>
 [[end]]
@@ -10,39 +14,148 @@
 [[end]]
 
 [[block page_scripts]]
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 <script>
-  // Auto-generate slug from title (only when slug field is still empty)
+  const MAX_BYTES = 300 * 1024;
+
+  // ── Shared resize utility ───────────────────────────────────────────────
+  async function resizeImageFile(file) {
+    if (file.size <= MAX_BYTES) return file;
+    const bitmap = await createImageBitmap(file);
+    const scale  = Math.sqrt(MAX_BYTES / file.size);
+    const w = Math.round(bitmap.width  * scale);
+    const h = Math.round(bitmap.height * scale);
+    const canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    canvas.getContext('2d').drawImage(bitmap, 0, 0, w, h);
+    return new Promise(resolve => {
+      canvas.toBlob(blob => {
+        resolve(new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' }));
+      }, 'image/jpeg', 0.85);
+    });
+  }
+
+  // ── Wire resize + label feedback to a file input ────────────────────────
+  function attachFileHandler(input, span) {
+    input.addEventListener('change', async function () {
+      const file = this.files[0];
+      if (!file) return;
+      span.classList.remove('text-green-700');
+      if (file.size > MAX_BYTES) {
+        span.textContent = 'Endrer størrelse…';
+        const resized = await resizeImageFile(file);
+        const dt = new DataTransfer();
+        dt.items.add(resized);
+        this.files = dt.files;
+        span.textContent = '✓ ' + file.name + ' (tilpasset størrelse)';
+      } else {
+        span.textContent = '✓ ' + file.name;
+      }
+      span.classList.add('text-green-700');
+    });
+  }
+
+  // ── Quill ───────────────────────────────────────────────────────────────
+  const quill = new Quill('#quill-editor', {
+    theme: 'snow',
+    modules: {
+      toolbar: {
+        container: [
+          [{ header: [1, 2, 3, false] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          ['blockquote', 'link', 'image'],
+          ['clean']
+        ],
+        handlers: {
+          image() {
+            const input = document.createElement('input');
+            input.type = 'file'; input.accept = 'image/*';
+            input.onchange = async () => {
+              const file = input.files[0];
+              if (!file) return;
+              const resized = await resizeImageFile(file);
+              const reader  = new FileReader();
+              reader.onload = e => {
+                const range = quill.getSelection(true);
+                quill.insertEmbed(range.index, 'image', e.target.result);
+                quill.setSelection(range.index + 1);
+              };
+              reader.readAsDataURL(resized);
+            };
+            input.click();
+          }
+        }
+      }
+    }
+  });
+
+  // ── Dynamic image rows ──────────────────────────────────────────────────
+  let rowCount = 0;
+
+  function addImageRow() {
+    const idx       = rowCount++;
+    const container = document.getElementById('new-images');
+    const row       = document.createElement('div');
+    row.className   = 'flex items-start gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200';
+    row.innerHTML   = `
+      <div class="flex-1 min-w-0">
+        <label class="flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed border-gray-300
+                       hover:border-green-400 cursor-pointer transition-colors group text-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 group-hover:text-green-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+          <span class="file-label text-gray-500 group-hover:text-green-600 truncate">Velg bilde</span>
+          <input type="file" name="new_image_${idx}" accept="image/*" class="sr-only">
+        </label>
+        <input type="text" name="new_desc_${idx}"
+               placeholder="Beskrivelse (valgfritt)"
+               class="mt-2 w-full rounded-lg border border-gray-300 px-3 py-1.5 text-sm
+                      focus:outline-none focus:ring-2 focus:ring-green-400 transition">
+      </div>
+      <button type="button"
+              class="remove-btn mt-1 shrink-0 text-xs text-red-500 hover:text-red-400 transition-colors">
+        Fjern
+      </button>`;
+
+    attachFileHandler(
+      row.querySelector('input[type="file"]'),
+      row.querySelector('.file-label')
+    );
+    row.querySelector('.remove-btn').addEventListener('click', () => row.remove());
+    container.appendChild(row);
+  }
+
+  document.getElementById('add-image-btn').addEventListener('click', addImageRow);
+
+  // ── Form submit: sync Quill content ────────────────────────────────────
+  document.querySelector('form').addEventListener('submit', () => {
+    document.getElementById('content').value = quill.root.innerHTML;
+  });
+
+  // ── Slug auto-generation ────────────────────────────────────────────────
   const titleInput = document.getElementById('title');
   const slugInput  = document.getElementById('slug');
 
+  // Lock auto-generation for existing pages (slug already set = edit mode)
+  if (slugInput.value) slugInput.dataset.edited = '1';
+
   function toSlug(str) {
-    return str
-      .toLowerCase()
-      .trim()
+    const d     = new Date();
+    const year  = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day   = String(d.getDate()).padStart(2, '0');
+    const title = str.toLowerCase().trim()
       .replace(/[^\w\s-]/g, '')
       .replace(/[\s_-]+/g, '-')
-      .replace(/^-+|-+$/g, '');
+      .replace(/^-+|-+$/, '');
+    return `${year}/${month}/${day}/${title}`;
   }
 
-  // Show selected filename in upload label
-  document.getElementById('image').addEventListener('change', function () {
-    const label = this.closest('label');
-    const span  = label.querySelector('span.text-sm');
-    if (this.files && this.files[0]) {
-      span.textContent = '✓ ' + this.files[0].name;
-      span.classList.add('text-green-700');
-    }
-  });
-
   titleInput.addEventListener('input', () => {
-    if (!slugInput.dataset.edited) {
-      slugInput.value = toSlug(titleInput.value);
-    }
+    if (!slugInput.dataset.edited) slugInput.value = toSlug(titleInput.value);
   });
-
-  slugInput.addEventListener('input', () => {
-    slugInput.dataset.edited = '1';
-  });
+  slugInput.addEventListener('input', () => { slugInput.dataset.edited = '1'; });
 </script>
 [[end]]
 
@@ -115,55 +228,54 @@
 
     <!-- Content -->
     <div class="px-6 py-5">
-      <label for="content" class="block text-sm font-semibold text-gray-700 mb-1.5">Innhold</label>
-      <textarea id="content" name="content" rows="10"
-                placeholder="Skriv HTML eller tekst her…"
-                class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm font-mono
-                       focus:outline-none focus:ring-2 focus:ring-green-400 transition resize-y">[[=form.vars.get('content', '')]]</textarea>
-      <p class="mt-1 text-xs text-gray-400">HTML støttes.</p>
+      <label class="block text-sm font-semibold text-gray-700 mb-1.5">Innhold</label>
+      <div id="quill-editor"
+           class="rounded-lg border border-gray-300 bg-white"
+           style="min-height: 220px;">[[=XML(form.vars.get('content', ''))]]</div>
+      <input type="hidden" id="content" name="content" value="[[=form.vars.get('content', '')]]">
     </div>
 
-    <!-- Image upload -->
+    <!-- Images -->
     <div class="px-6 py-5">
-      <label class="block text-sm font-semibold text-gray-700 mb-2">Bilde</label>
+      <label class="block text-sm font-semibold text-gray-700 mb-3">Bilder</label>
 
-      [[_current_img = form.vars.get('image', '')]]
-      [[if _current_img:]]
-      <div class="mb-3 flex items-start gap-4">
-        <img src="[[=URL('download', _current_img)]]"
-             alt="Nåværende bilde"
-             class="h-28 w-auto rounded-lg object-cover border border-gray-200 shadow-sm">
-        <div class="text-xs text-gray-500 mt-1">
-          <p class="font-medium text-gray-700 mb-1">Nåværende bilde</p>
-          <p class="font-mono break-all text-gray-400">[[=_current_img]]</p>
-          <label class="mt-2 inline-flex items-center gap-2 text-red-600 cursor-pointer hover:text-red-500">
-            <input type="checkbox" name="remove_image"
+      <!-- Existing images (edit mode) -->
+      [[if page_images:]]
+      <div class="space-y-3 mb-4">
+        [[for img in page_images:]]
+        <div class="flex items-start gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+          <img src="[[=URL('download', img.image)]]"
+               alt="Bilde"
+               class="h-16 w-20 rounded-lg object-cover border border-gray-200 shrink-0">
+          <div class="flex-1 min-w-0">
+            <input type="text"
+                   name="desc_[[=img.id]]"
+                   value="[[=img.description]]"
+                   placeholder="Beskrivelse (valgfritt)"
+                   class="w-full rounded-lg border border-gray-300 px-3 py-1.5 text-sm
+                          focus:outline-none focus:ring-2 focus:ring-green-400 transition">
+          </div>
+          <label class="shrink-0 flex items-center gap-1.5 text-xs text-red-500 cursor-pointer hover:text-red-400 mt-2">
+            <input type="checkbox" name="delete_[[=img.id]]"
                    class="rounded border-gray-300 text-red-500 focus:ring-red-400">
-            Fjern bilde
+            Slett
           </label>
         </div>
+        [[pass]]
       </div>
       [[pass]]
 
-      <label for="image"
-             class="flex flex-col items-center justify-center w-full rounded-lg border-2 border-dashed
-                    border-gray-300 hover:border-green-400
-                    px-4 py-6 text-center cursor-pointer transition-colors group">
-        <svg xmlns="http://www.w3.org/2000/svg"
-             class="h-8 w-8 mb-2 text-gray-400 group-hover:text-green-500 transition-colors"
-             fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14
-                   m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+      <!-- New image rows added dynamically -->
+      <div id="new-images" class="space-y-2 mb-3"></div>
+
+      <button type="button" id="add-image-btn"
+              class="inline-flex items-center gap-2 text-sm text-green-700 hover:text-green-600
+                     font-medium transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
         </svg>
-        <span class="text-sm font-medium text-gray-600 group-hover:text-green-600 transition-colors">
-          [[if _current_img:]]Erstatt med nytt bilde[[else:]]Velg bilde[[pass]]
-        </span>
-        <span class="text-xs text-gray-400 mt-0.5">JPG, PNG, GIF eller WebP</span>
-        <input id="image" name="image" type="file"
-               accept=".jpg,.jpeg,.png,.gif,.webp,image/*"
-               class="sr-only">
-      </label>
+        Legg til bilde
+      </button>
     </div>
 
     <!-- Position + Published -->

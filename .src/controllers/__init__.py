@@ -25,4 +25,5 @@ from ..common import (
 # ── Route modules ──────────────────────────────────────────────
 from . import home   # noqa: F401  – registers the / (index) route
 from . import admin  # noqa: F401  – registers /admin/pages/* routes
-from . import page   # noqa: F401  – registers /<slug> public route (must be last)
+from . import news   # noqa: F401  – registers /nyheter route
+from . import page   # noqa: F401  – registers /<slug:path> public route (must be last)

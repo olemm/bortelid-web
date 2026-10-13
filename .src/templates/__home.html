@@ -1,0 +1,194 @@
+[[extend 'base.html']]
+
+[[block page_title]]Bortelid – Hytter i norsk natur[[end]]
+
+[[block page_nav_links]]
+<a href="#hytter" class="hover:text-green-300 transition-colors">Hytter</a>
+<a href="#om-bortelid" class="hover:text-green-300 transition-colors">Om Bortelid</a>
+<a href="#kontakt" class="hover:text-green-300 transition-colors">Kontakt</a>
+[[end]]
+
+[[block page_nav_links_mobile]]
+<a href="#hytter" class="block px-2 py-1.5 rounded hover:bg-forest-700 transition-colors">Hytter</a>
+<a href="#om-bortelid" class="block px-2 py-1.5 rounded hover:bg-forest-700 transition-colors">Om Bortelid</a>
+<a href="#kontakt" class="block px-2 py-1.5 rounded hover:bg-forest-700 transition-colors">Kontakt</a>
+[[end]]
+
+<!-- ══════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════ -->
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+
+  <!-- Background gradient (placeholder until real photography is added) -->
+  <div class="absolute inset-0 bg-gradient-to-br from-forest-900 via-forest-800 to-green-900"></div>
+
+  <!-- Subtle texture overlay -->
+  <div class="absolute inset-0 opacity-20"
+       style="background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='0.5'%3E%3Cpath d='M30 5 L30 55 M5 30 L55 30 M10 10 L50 50 M50 10 L10 50'/%3E%3C/g%3E%3C/svg%3E\");"></div>
+
+  <!-- Mountain silhouette SVG at bottom -->
+  <div class="absolute bottom-0 left-0 right-0">
+    <svg viewBox="0 0 1440 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" class="w-full h-32 sm:h-48">
+      <path d="M0,200 L0,120 L120,60 L240,100 L360,40 L480,80 L600,20 L720,70 L840,30 L960,90 L1080,50 L1200,95 L1320,45 L1440,80 L1440,200 Z"
+            fill="#f9fafb" />
+      <path d="M0,200 L0,150 L180,100 L360,130 L540,90 L720,120 L900,85 L1080,115 L1260,80 L1440,110 L1440,200 Z"
+            fill="#f3f4f6" opacity="0.6"/>
+    </svg>
+  </div>
+
+  <!-- Hero content -->
+  <div class="relative z-10 text-center text-white px-6 sm:px-12 max-w-4xl mx-auto">
+    <!-- Eyebrow tag -->
+    <span class="inline-block mb-4 px-4 py-1 rounded-full border border-green-400/50 text-green-300 text-sm font-medium tracking-widest uppercase">
+      Setesdal · Norge
+    </span>
+
+    <!-- Main headline -->
+    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight mb-6 drop-shadow-lg">
+      Opplev Bortelid<br/>
+      <span class="text-green-300">i sitt ess</span>
+    </h1>
+
+    <!-- Sub-headline -->
+    <p class="text-lg sm:text-xl text-gray-200 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
+      Roen fra fjellhøyden, friheten i naturen — finn din perfekte
+      hytte blant Setesdal vakreste landskap.
+    </p>
+
+    <!-- CTA buttons -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="#hytter"
+         class="inline-block bg-green-500 hover:bg-green-400 text-white font-semibold px-8 py-3.5 rounded-lg shadow-lg transition-all duration-200 hover:shadow-green-500/40 hover:shadow-xl hover:-translate-y-0.5">
+        Se tilgjengelige hytter
+      </a>
+      <a href="#om-bortelid"
+         class="inline-block border border-white/40 hover:border-white text-white font-semibold px-8 py-3.5 rounded-lg backdrop-blur-sm transition-all duration-200 hover:bg-white/10">
+        Les mer om Bortelid
+      </a>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="mt-16 flex justify-center animate-bounce">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     FEATURE HIGHLIGHTS
+══════════════════════════════════════════════ -->
+<section id="hytter" class="bg-gray-50 py-24 px-6">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="text-center mb-16">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Hvorfor velge Bortelid?</h2>
+      <p class="text-gray-500 max-w-xl mx-auto text-lg font-light">
+        En fjellperle midt i Setesdal — ren luft, stille skoger og utsikt som tar pusten fra deg.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+
+      <!-- Feature 1 -->
+      <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+        <div class="mx-auto mb-5 flex items-center justify-center w-14 h-14 rounded-full bg-green-50">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 21V12h6v9"/>
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">Unike hytter</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">
+          Fra rustikke tømmerhytter til moderne fjellhjem — alle med panoramautsikt og vedovn.
+        </p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+        <div class="mx-auto mb-5 flex items-center justify-center w-14 h-14 rounded-full bg-blue-50">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m8.66-9h-1M4.34 12h-1m15.07-6.07-.7.7M6.3 17.7l-.7.7m12.02 0-.7-.7M6.3 6.3l-.7-.7M12 7a5 5 0 100 10A5 5 0 0012 7z"/>
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">Fire årstider</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">
+          Langrenn og alpin om vinteren, turer og fisking om sommeren — Bortelid er alltid verd besøket.
+        </p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+        <div class="mx-auto mb-5 flex items-center justify-center w-14 h-14 rounded-full bg-amber-50">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-4-4h-1M9 20H4v-2a4 4 0 014-4h1m4-4a4 4 0 100-8 4 4 0 000 8z"/>
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">Direkte fra eier</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">
+          Bestill direkte fra hytteeieren — ingen mellommann, ingen skjulte gebyrer. Ekte norsk gjestfrihet.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     ABOUT BORTELID (teaser)
+══════════════════════════════════════════════ -->
+<section id="om-bortelid" class="bg-white py-24 px-6">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+    <!-- Text side -->
+    <div>
+      <span class="text-green-600 text-sm font-semibold tracking-widest uppercase">Om stedet</span>
+      <h2 class="mt-2 text-3xl sm:text-4xl font-bold text-gray-900 leading-snug">
+        Bortelid —<br/>der fjellet møter himmelen
+      </h2>
+      <p class="mt-5 text-gray-500 leading-relaxed text-lg font-light">
+        Bortelid ligger 850 moh. i Åseral kommune i Agder og er kjent for sin rene luft,
+        alpinbakker og et mylder av preparerte langrennsløyper. Om sommeren venter
+        stier for alle nivåer, stille vann og det tyste livet som bare fjellet kan gi.
+      </p>
+      <p class="mt-4 text-gray-500 leading-relaxed font-light">
+        Her møtes lokalbefolkning og tilreisende i en uformell og inkluderende ånd — det
+        er ikke uten grunn at folk kommer tilbake år etter år.
+      </p>
+      <a href="#kontakt" class="mt-8 inline-block text-green-600 font-semibold hover:text-green-500 transition-colors">
+        Ta kontakt &rarr;
+      </a>
+    </div>
+
+    <!-- Illustrative placeholder panel (replace with <img> when photography is ready) -->
+    <div class="rounded-2xl overflow-hidden shadow-lg bg-gradient-to-br from-forest-800 to-green-900 aspect-video flex items-center justify-center">
+      <div class="text-center text-white/50 p-8">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        <p class="text-sm">Fotografi kommer</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     CONTACT CTA STRIP
+══════════════════════════════════════════════ -->
+<section id="kontakt" class="bg-forest-800 py-20 px-6 text-center text-white">
+  <div class="max-w-2xl mx-auto">
+    <h2 class="text-3xl sm:text-4xl font-bold mb-4">Klar for fjellopplevelsen?</h2>
+    <p class="text-gray-300 text-lg font-light mb-8">
+      Ta kontakt med oss, og vi hjelper deg å finne den perfekte hytten for ditt neste opphold.
+    </p>
+    <a href="mailto:post@bortelid.no"
+       class="inline-block bg-green-500 hover:bg-green-400 text-white font-semibold px-8 py-3.5 rounded-lg shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-green-500/40 hover:shadow-xl">
+      Send oss en e-post
+    </a>
+  </div>
+</section>

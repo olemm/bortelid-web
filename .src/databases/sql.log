@@ -60,3 +60,31 @@ success!
 timestamp: 2026-04-21T15:30:15.959005
 ALTER TABLE `pages` DROP COLUMN `image_url`;
 success!
+timestamp: 2026-04-30T13:01:22.363655
+ALTER TABLE `pages` DROP COLUMN `image`;
+success!
+timestamp: 2026-04-30T13:01:22.517277
+CREATE TABLE `page_images`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `page_id` INT  NOT NULL , INDEX `page_id__idx` (`page_id`), FOREIGN KEY (`page_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE,
+    `image` VARCHAR(512),
+    `description` VARCHAR(500),
+    `position` INTEGER,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2026-04-30T14:34:00.573510
+ALTER TABLE `pages` ADD `self_uuid` VARCHAR(36) UNIQUE;
+success!
+timestamp: 2026-04-30T14:34:00.804332
+ALTER TABLE `pages` ADD `created_by` VARCHAR(36);
+success!
+timestamp: 2026-04-30T14:34:00.837716
+ALTER TABLE `pages` ADD `updated_by` VARCHAR(36);
+success!
+timestamp: 2026-04-30T14:34:00.869487
+ALTER TABLE `pages` ADD `created_on` DATE;
+success!
+timestamp: 2026-04-30T14:34:00.905435
+ALTER TABLE `pages` ADD `updated_on` DATE;
+success!

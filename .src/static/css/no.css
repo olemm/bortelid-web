@@ -261,7 +261,7 @@ body > center > * {
 
 @media (min-width:600px) {
   .col,.c25,.c33,.c50,.c66,.c75 {
-    padding: 1.5em;
+    padding: 1.1em;
     display: table-cell;
     vertical-align: top;
   }

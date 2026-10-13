@@ -1,0 +1,159 @@
+:root {
+  /* ── SUMMER / DEFAULT ── */
+
+  /* Navigation */
+  --color-nav-bg:          #ffffff;
+  --color-nav-border:      #e5e7eb;
+  --color-nav-text:        #2c4a4a;
+  --color-nav-text-muted:  #6b7280;
+
+  /* Global accent & page */
+  --color-accent:          #2c7a4a;
+  --color-accent-hover:    #1e5c38;
+  --color-bg:              #ffffff;
+  --color-text:            #1a2e2e;
+  --color-text-muted:      #6b7280;
+
+  /* Footer */
+  --color-footer-bg:       #2c4a4a;
+  --color-footer-text:     #d1fae5;
+
+  /* Hero section */
+  --color-hero-from:       #132910;
+  --color-hero-via:        #1e3d1a;
+  --color-hero-to:         #14532d;
+  --color-hero-accent:     #86efac;
+  --color-hero-subtitle:   #e5e7eb;
+  --color-hero-tag-border: rgba(134, 239, 172, 0.5);
+
+  /* Sections */
+  --color-section-alt:     #f9fafb;
+  --color-cta-bg:          #1e3d1a;
+  --color-cta-text:        #d1d5db;
+
+  /* Feature card icons */
+  --color-feature-1-bg:    #f0fdf4;
+  --color-feature-1-icon:  #16a34a;
+  --color-feature-2-bg:    #eff6ff;
+  --color-feature-2-icon:  #3b82f6;
+  --color-feature-3-bg:    #fffbeb;
+  --color-feature-3-icon:  #f59e0b;
+}
+
+
+/* ── WINTER THEME — uncomment to activate ──
+:root {
+  --color-nav-bg:          #f0f4f8;
+  --color-nav-border:      #c8d8e8;
+  --color-nav-text:        #1a3a5c;
+  --color-nav-text-muted:  #7a95b0;
+
+  --color-accent:          #2563eb;
+  --color-accent-hover:    #1d4ed8;
+  --color-bg:              #f0f4f8;
+  --color-text:            #1a2e3e;
+  --color-text-muted:      #7a95b0;
+
+  --color-footer-bg:       #1a3a5c;
+  --color-footer-text:     #bfdbfe;
+
+  --color-hero-from:       #0f2540;
+  --color-hero-via:        #1a3a5c;
+  --color-hero-to:         #1e3a6e;
+  --color-hero-accent:     #93c5fd;
+  --color-hero-subtitle:   #e2e8f0;
+  --color-hero-tag-border: rgba(147, 197, 253, 0.5);
+
+  --color-section-alt:     #e8eef5;
+  --color-cta-bg:          #1a3a5c;
+  --color-cta-text:        #cbd5e1;
+
+  --color-feature-1-bg:    #eff6ff;
+  --color-feature-1-icon:  #2563eb;
+  --color-feature-2-bg:    #f0f9ff;
+  --color-feature-2-icon:  #0ea5e9;
+  --color-feature-3-bg:    #fef3c7;
+  --color-feature-3-icon:  #d97706;
+}
+*/
+
+
+/* ── AUTUMN THEME — uncomment to activate ──
+:root {
+  --color-nav-bg:          #fdf8f3;
+  --color-nav-border:      #e8d5b0;
+  --color-nav-text:        #5c3a1e;
+  --color-nav-text-muted:  #a07850;
+
+  --color-accent:          #c2640a;
+  --color-accent-hover:    #a0520a;
+  --color-bg:              #fdf8f3;
+  --color-text:            #3e2a10;
+  --color-text-muted:      #a07850;
+
+  --color-footer-bg:       #5c3a1e;
+  --color-footer-text:     #fde8c8;
+
+  --color-hero-from:       #3e2010;
+  --color-hero-via:        #5c3a1e;
+  --color-hero-to:         #78350f;
+  --color-hero-accent:     #fcd34d;
+  --color-hero-subtitle:   #fde8cc;
+  --color-hero-tag-border: rgba(252, 211, 77, 0.5);
+
+  --color-section-alt:     #fdf8f3;
+  --color-cta-bg:          #5c3a1e;
+  --color-cta-text:        #fde8c8;
+
+  --color-feature-1-bg:    #fef3c7;
+  --color-feature-1-icon:  #d97706;
+  --color-feature-2-bg:    #fff7ed;
+  --color-feature-2-icon:  #ea580c;
+  --color-feature-3-bg:    #fdf4ff;
+  --color-feature-3-icon:  #a855f7;
+}
+*/
+
+
+/* ── SPRING THEME — uncomment to activate ──
+:root {
+  --color-nav-bg:          #f5fbf5;
+  --color-nav-border:      #b8e0b8;
+  --color-nav-text:        #1e4a2e;
+  --color-nav-text-muted:  #6b9a7a;
+
+  --color-accent:          #16a34a;
+  --color-accent-hover:    #15803d;
+  --color-bg:              #f5fbf5;
+  --color-text:            #1a2e1a;
+  --color-text-muted:      #6b9a7a;
+
+  --color-footer-bg:       #1e4a2e;
+  --color-footer-text:     #bbf7d0;
+
+  --color-hero-from:       #052e16;
+  --color-hero-via:        #14532d;
+  --color-hero-to:         #166534;
+  --color-hero-accent:     #86efac;
+  --color-hero-subtitle:   #dcfce7;
+  --color-hero-tag-border: rgba(134, 239, 172, 0.5);
+
+  --color-section-alt:     #edf7ed;
+  --color-cta-bg:          #1e4a2e;
+  --color-cta-text:        #bbf7d0;
+
+  --color-feature-1-bg:    #f0fdf4;
+  --color-feature-1-icon:  #16a34a;
+  --color-feature-2-bg:    #fef9c3;
+  --color-feature-2-icon:  #ca8a04;
+  --color-feature-3-bg:    #fdf2f8;
+  --color-feature-3-icon:  #ec4899;
+}
+*/
+
+
+.py4web-validation-error {
+  margin-top: -0.25rem;
+  font-size: 0.8em;
+  color: red;
+}
