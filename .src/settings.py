@@ -8,6 +8,7 @@ This file is provided as an example:
 
 import os
 
+from connectors import uri
 from py4web.core import required_folder
 
 # mode (default or development)
@@ -20,7 +21,11 @@ APP_NAME = os.path.split(APP_FOLDER)[-1]
 # DB_FOLDER:    Sets the place where migration files will be created
 #               and is the store location for SQLite databases
 DB_FOLDER = required_folder(APP_FOLDER, "databases")
-DB_URI = "mysql://qrale_master:azey652@0.0.0.0:3307/bortelid-web"
+# DB_URI: from factory (~/code/factory/.env, LOCAL_DB_*): no password in this file
+DB_URI = uri("bortelid-web")
+# DB_TABLE_HASH: fixed prefix for the .table files (bortelid-web_<table>.table), so a new host
+#                or password does not make pydal think the tables are new
+DB_TABLE_HASH = "bortelid-web"
 DB_POOL_SIZE = 1
 DB_MIGRATE = True
 DB_FAKE_MIGRATE = False
