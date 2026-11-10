@@ -46,6 +46,7 @@ db = DAL(
     pool_size=settings.DB_POOL_SIZE,
     migrate=settings.DB_MIGRATE,
     fake_migrate=settings.DB_FAKE_MIGRATE,
+    table_hash=settings.DB_TABLE_HASH,
 )
 
 # #######################################################
